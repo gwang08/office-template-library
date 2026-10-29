@@ -10,10 +10,17 @@ import { OfficeModule } from './office/office.module';
 import { TemplatesModule } from './templates/templates.module';
 import { DocumentsModule } from './documents/documents.module';
 
+// 100 req/min default; THROTTLE_LIMIT lets the e2e security suite verify the
+// 429 path in a small burst instead of 100+ requests (documented fallback:
+// any missing/invalid value keeps the production default).
+const throttleLimit = Number(process.env.THROTTLE_LIMIT);
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
+    ThrottlerModule.forRoot([
+      { ttl: 60_000, limit: Number.isInteger(throttleLimit) && throttleLimit > 0 ? throttleLimit : 100 },
+    ]),
     // Public previews/thumbnails only. renderPath is constrained to the /assets
     // subtree so the static fallback never swallows API 404s (no SPA fallback
     // needed: the web app is a separate Vite dev server / built bundle).

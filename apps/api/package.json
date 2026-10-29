@@ -10,7 +10,7 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "test": "jest",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

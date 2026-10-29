@@ -22,6 +22,7 @@ storage/documents/*
 # SQLite databases (dev + test artifacts)
 *.db
 *.db-journal
+storage/test.db   # e2e suite database (see apps/api/test/setup-e2e.ts)
 
 # Local env — created from the committed .env.example by `pnpm setup`
 apps/api/.env
