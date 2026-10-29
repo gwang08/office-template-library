@@ -1,7 +1,8 @@
 // Template preview modal: fetches the detail DTO, branches by kind —
 // DOCX → sanitized mammoth HTML, PPTX → live deck w/ SVG fallback.
-// "Use template" (docx) creates the copy-on-use document and navigates to
-// the editor; pptx still delegates to onUse (placeholder until Phase 05b).
+// "Use template" runs copy-on-use for BOTH kinds and lands the new document
+// in its kind's workspace: docx → Tiptap editor, pptx → slides page
+// (previews + download; Phase 05b).
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from '../../components/modal';
@@ -19,12 +20,9 @@ type DetailState =
 export function PreviewModal({
   template,
   onClose,
-  onUse,
 }: {
   template: TemplateDto;
   onClose: () => void;
-  /** PPTX placeholder until Phase 05b wires the slides flow. */
-  onUse: (template: TemplateDto) => void;
 }) {
   const navigate = useNavigate();
   const [detailState, setDetailState] = useState<DetailState>({ phase: 'loading' });
@@ -52,17 +50,15 @@ export function PreviewModal({
   }, [template.id, retryToken]);
 
   const handleUse = async () => {
-    if (template.kind !== 'docx') {
-      onUse(template); // PPTX placeholder (Phase 05b)
-      return;
-    }
     setCreating(true);
     setUseError(null);
     try {
-      // Copy-on-use: the template file stays untouched; a new document row
-      // (with contentHtml from the copy) comes back — land in the editor.
+      // Copy-on-use: the template file stays untouched; the new document row
+      // (contentHtml set for docx, null for pptx) lands in its kind's
+      // workspace — the Tiptap editor, or the pptx slides page.
       const doc = await createDocument(template.id);
-      navigate(`/documents/${encodeURIComponent(doc.id)}/edit`);
+      const base = `/documents/${encodeURIComponent(doc.id)}`;
+      navigate(doc.kind === 'pptx' ? base : `${base}/edit`);
     } catch (cause: unknown) {
       setCreating(false);
       setUseError(cause instanceof Error ? cause.message : 'Failed to create document');

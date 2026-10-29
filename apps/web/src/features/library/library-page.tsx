@@ -1,8 +1,8 @@
 // Library page ("/"): filter bar (debounced search + kind tabs + category
 // chips) feeding useTemplates, responsive card grid with skeleton/error/empty
-// states, and the preview modal at page level. The modal itself handles the
-// docx copy-on-use flow (Phase 04); onUse now only covers the pptx placeholder.
-import { useCallback, useEffect, useState } from 'react';
+// states, and the preview modal at page level. The modal owns the whole
+// copy-on-use flow for BOTH kinds (Phase 05b): docx → editor, pptx → slides.
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CategoryChips } from '../../components/category-chips';
 import { KindTabs, type KindFilter } from '../../components/kind-tabs';
@@ -13,33 +13,18 @@ import type { TemplateDto } from '../../lib/types';
 import { PreviewModal } from '../template-preview/preview-modal';
 import { useTemplates } from './use-templates';
 
-const TOAST_MS = 2800;
-
 export function LibraryPage() {
   const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [kind, setKind] = useState<KindFilter>('all');
   const [selected, setSelected] = useState<TemplateDto | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
 
   const { templates, loading, error, categories, retry } = useTemplates({
     search: searchQuery.trim() || undefined,
     category,
     kind: kind === 'all' ? undefined : kind,
   });
-
-  // PPTX placeholder until Phase 05b wires the slides flow (docx is handled
-  // inside the preview modal: create document → navigate to the editor).
-  const handleUse = useCallback((template: TemplateDto) => {
-    setToast(`Slides editor for "${template.name}" — coming soon`);
-  }, []);
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), TOAST_MS);
-    return () => clearTimeout(timer);
-  }, [toast]);
 
   const hasFilters = Boolean(searchQuery.trim() || category !== undefined || kind !== 'all');
   const clearFilters = () => {
@@ -107,18 +92,7 @@ export function LibraryPage() {
         <PreviewModal
           template={selected}
           onClose={() => setSelected(null)}
-          onUse={handleUse}
         />
-      )}
-
-      {toast && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white shadow-lg"
-        >
-          {toast}
-        </div>
       )}
     </main>
   );

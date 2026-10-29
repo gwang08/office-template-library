@@ -1,7 +1,7 @@
 // Route /documents — all documents created from templates (newest first).
-// DOCX rows open the Tiptap editor; PPTX rows keep a disabled editor action
-// until the slides page lands (Phase 05b) but Download already works — the
-// export endpoint handles both kinds.
+// The open action routes by kind (Phase 05b): DOCX rows go to the Tiptap
+// editor, PPTX rows to the slides page; Download works for both kinds —
+// the export endpoint is kind-agnostic.
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EmptyState, ErrorState, Spinner } from '../../components/state-blocks';
@@ -119,14 +119,12 @@ function DocumentRow({ doc }: { doc: DocumentListItemDto }) {
               Open editor
             </Link>
           ) : (
-            <button
-              type="button"
-              disabled
-              title="Presentation editor arrives in a later phase"
-              className="cursor-not-allowed rounded-lg bg-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-400"
+            <Link
+              to={`/documents/${doc.id}`}
+              className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-amber-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
             >
-              Open editor
-            </button>
+              Open slides
+            </Link>
           )}
           <a
             href={exportUrl(doc.id)}

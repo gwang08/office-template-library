@@ -1,8 +1,10 @@
 // Route /documents/:id/edit — loads the document detail (404-aware) and
 // hands off to the keyed workspace (a fresh editor per document id, so
-// switching documents never reuses stale editor state).
+// switching documents never reuses stale editor state). PPTX documents have
+// no in-browser editor: the kind guard redirects them to their slides page
+// (the note there explains the download-and-edit model).
 import { useEffect, useState, type ReactNode } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { ErrorState, Spinner } from '../../components/state-blocks';
 import { ApiError, getDocument, type DocumentDetailDto } from '../../lib/api';
 import { EditorWorkspace } from './editor-workspace';
@@ -58,6 +60,12 @@ export function EditorPage() {
         />
       </EditorShell>
     );
+  }
+
+  // Kind guard: a pptx document has no editor — its workspace is the
+  // document page (slide previews + download), which carries the notice.
+  if (state.doc.kind === 'pptx') {
+    return <Navigate to={`/documents/${state.doc.id}`} replace />;
   }
 
   return <EditorWorkspace key={state.doc.id} doc={state.doc} />;
