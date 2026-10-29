@@ -1,12 +1,12 @@
 // DocxHandler spec — real files in a tmpdir (resolveStorageKey is spied to
 // redirect the storage root), no DB. The renderHtmlToDocx -> extractHtml
 // round-trip is the regression guard for the young docx/html parser.
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Document, HeadingLevel, Packer, Paragraph, TextRun } from 'docx';
 import * as storagePaths from '../storage/storage.paths';
-import { DocxHandler } from './docx.handler';
+import { DOCX_MIME, DocxHandler } from './docx.handler';
 
 // Redirect every storage key into a per-run tmpdir (ts-jest compiles to CJS,
 // so spying on the module export intercepts the handler's calls).
@@ -94,14 +94,24 @@ describe('DocxHandler.renderHtmlToDocx (docx/html)', () => {
 });
 
 describe('DocxHandler.exportDocument (interface seam)', () => {
-  it('writes the rendered DOCX to the storage key', async () => {
-    await handler.exportDocument(
-      { templateId: 't', documentId: 'd', title: 'T' },
+  it('returns a rendered payload: zip buffer + slug filename + OOXML mime', async () => {
+    const payload = await handler.exportDocument(
+      { templateId: 't', documentId: 'd', title: 'Q3 Report — final!' },
       '<p>exported</p>',
       'documents/exported.docx',
     );
-    const target = path.join(root, 'documents/exported.docx');
-    expect(existsSync(target)).toBe(true);
-    expect(readFileSync(target).subarray(0, 2).toString('latin1')).toBe('PK');
+    expect(payload.filename).toBe('q3-report-final.docx');
+    expect(payload.mime).toBe(DOCX_MIME);
+    expect(payload.buffer.subarray(0, 2).toString('latin1')).toBe('PK');
+  });
+
+  it('renders an (empty) document when contentHtml is null', async () => {
+    const payload = await handler.exportDocument(
+      { templateId: 't', documentId: 'd', title: 'x' },
+      null,
+      'documents/exported.docx',
+    );
+    expect(payload.buffer.length).toBeGreaterThan(0);
+    expect(payload.buffer.subarray(0, 2).toString('latin1')).toBe('PK');
   });
 });

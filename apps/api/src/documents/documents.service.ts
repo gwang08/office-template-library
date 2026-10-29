@@ -1,7 +1,7 @@
 // Documents application service: copy-on-use creation, list/detail, partial
-// update and DOCX export. Kind dispatch goes through the OfficeHandlerRegistry
-// seam (501 for kinds without a handler — pptx until Phase 05); the html
-// capabilities are delegated to the concrete DocxHandler.
+// update and office export. Kind dispatch goes through the OfficeHandlerRegistry
+// seam (501 for kinds without a handler); the docx html ingest is delegated
+// to the concrete DocxHandler.
 import { randomUUID } from 'node:crypto';
 import { rm } from 'node:fs/promises';
 import {
@@ -9,14 +9,12 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-  NotImplementedException,
 } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { OfficeHandlerRegistry } from '../office/office-handler.registry';
-import { DOCX_MIME, DocxHandler } from '../office/docx.handler';
+import { DocxHandler } from '../office/docx.handler';
 import { resolveStorageKey } from '../storage/storage.paths';
-import { slugifyDocxFilename } from './export-filename';
 import type { CreateDocumentDto } from './dto/create-document.dto';
 import type { UpdateDocumentDto } from './dto/update-document.dto';
 import type { OfficeKind } from '../office/office-handler.interface';
@@ -138,11 +136,18 @@ export class DocumentsService {
 
   async export(id: string): Promise<ExportedDocument> {
     const doc = await this.findDocument(id);
-    if (doc.kind !== 'docx') {
-      throw new NotImplementedException(`Export is not implemented for kind "${doc.kind}" yet`);
+    if (!isOfficeKind(doc.kind)) {
+      throw new InternalServerErrorException(`Document has an unknown kind: ${doc.kind}`);
     }
-    const buffer = await this.docxHandler.renderHtmlToDocx(doc.contentHtml ?? '');
-    return { buffer, filename: slugifyDocxFilename(doc.title), mime: DOCX_MIME };
+    // Strategy seam: each handler builds its kind's payload (docx renders
+    // editor HTML into a fresh DOCX; pptx streams the stored copy). The
+    // registry throws 501 for kinds without a handler.
+    const handler = this.registry.getHandler(doc.kind);
+    return handler.exportDocument(
+      { templateId: doc.templateId, documentId: doc.id, title: doc.title },
+      doc.contentHtml,
+      doc.storageKey,
+    );
   }
 
   private async findDocument(id: string): Promise<DocumentRow> {

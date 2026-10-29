@@ -1,17 +1,18 @@
 // DOCX OfficeHandler implementation (first concrete handler; pptx lands in
-// Phase 05). Implements the generic OfficeHandler seam (copy + file export)
-// and adds the docx-specific HTML capabilities used by the documents flow:
-// mammoth ingest (underline preserved via styleMap) and docx/html render.
+// Phase 05). Implements the generic OfficeHandler seam (copy + export
+// payload) and adds the docx-specific HTML capabilities used by the
+// documents flow: mammoth ingest (underline preserved via styleMap) and
+// docx/html render.
 // docx is pinned to EXACTLY 9.15.0 because docx/html is young — the
 // export -> re-ingest round-trip spec below is its regression guard.
-import { copyFile, mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Document, Packer } from 'docx';
 import { htmlToContent } from 'docx/html';
 import mammoth from 'mammoth';
 import { resolveStorageKey } from '../storage/storage.paths';
-import type { OfficeDocumentContext, OfficeHandler, OfficeKind } from './office-handler.interface';
+import { slugifyDocxFilename } from '../documents/export-filename';
+import { copyStoredFile } from './copy-stored-file';
+import type { OfficeDocumentContext, OfficeExportPayload, OfficeHandler, OfficeKind } from './office-handler.interface';
 
 export const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
@@ -21,10 +22,7 @@ export class DocxHandler implements OfficeHandler {
 
   /** Byte-for-byte copy of the template file; the source is never written to. */
   async createDocumentCopy(templateStorageKey: string, documentStorageKey: string): Promise<void> {
-    const source = resolveStorageKey(templateStorageKey);
-    const target = resolveStorageKey(documentStorageKey);
-    await mkdir(path.dirname(target), { recursive: true });
-    await copyFile(source, target);
+    await copyStoredFile(templateStorageKey, documentStorageKey);
   }
 
   /** mammoth -> HTML for the editor. styleMap keeps <u> from being dropped. */
@@ -46,15 +44,13 @@ export class DocxHandler implements OfficeHandler {
     return Packer.toBuffer(doc);
   }
 
-  /** Interface seam: writes the exported DOCX to the document's storage key. */
+  /** Interface seam: renders editor HTML into a fresh DOCX export payload. */
   async exportDocument(
-    _context: OfficeDocumentContext,
-    content: string,
-    documentStorageKey: string,
-  ): Promise<void> {
-    const buffer = await this.renderHtmlToDocx(content);
-    const target = resolveStorageKey(documentStorageKey);
-    await mkdir(path.dirname(target), { recursive: true });
-    await writeFile(target, buffer);
+    context: OfficeDocumentContext,
+    content: string | null,
+    _documentStorageKey: string,
+  ): Promise<OfficeExportPayload> {
+    const buffer = await this.renderHtmlToDocx(content ?? '');
+    return { buffer, mime: DOCX_MIME, filename: slugifyDocxFilename(context.title) };
   }
 }

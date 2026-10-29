@@ -37,16 +37,18 @@ const prisma = {
 } as unknown as PrismaService;
 
 // Mocked registry: docx resolves to a handler whose copy is a REAL fs copy
-// within the tmpdir (the service's storageKey contract stays under test);
-// pptx mimics the unregistered-kind 501 behavior.
+// within the tmpdir (the service's storageKey contract stays under test)
+// and whose export delegates to a REAL DocxHandler (rendering stays under
+// test); non-docx kinds mimic the unregistered-kind 501 behavior.
 const copyMock = jest.fn(async (srcKey: string, dstKey: string) => {
   mkdirSync(path.dirname(path.join(root, dstKey)), { recursive: true });
   copyFileSync(path.join(root, srcKey), path.join(root, dstKey));
 });
+const realDocxHandler = new DocxHandler();
 const docxishHandler: OfficeHandler = {
   kind: 'docx',
   createDocumentCopy: copyMock,
-  exportDocument: async () => undefined,
+  exportDocument: (context, content, key) => realDocxHandler.exportDocument(context, content, key),
 };
 const getHandler = jest.fn((kind: string) => {
   if (kind !== 'docx') {
@@ -56,7 +58,7 @@ const getHandler = jest.fn((kind: string) => {
 });
 const registry = { getHandler } as unknown as OfficeHandlerRegistry;
 
-const service = new DocumentsService(prisma, registry, new DocxHandler());
+const service = new DocumentsService(prisma, registry, realDocxHandler);
 
 const docxTemplate = { id: 't-1', kind: 'docx', name: 'Resume', storageKey: 'templates/fixture.docx' };
 const storedRow = {
@@ -98,7 +100,7 @@ describe('DocumentsService.create', () => {
     expect(prisma.document.create).not.toHaveBeenCalled();
   });
 
-  it('propagates the registry 501 for pptx (no handler registered yet)', async () => {
+  it('propagates the registry 501 for pptx when no handler is registered', async () => {
     (prisma.template.findUnique as jest.Mock).mockResolvedValue({ ...docxTemplate, kind: 'pptx' });
     await expect(service.create({ templateId: 't-1' })).rejects.toThrow(NotImplementedException);
     expect(prisma.document.create).not.toHaveBeenCalled();
@@ -157,7 +159,7 @@ describe('DocumentsService.export', () => {
     expect(file.buffer.subarray(0, 2).toString('latin1')).toBe('PK');
   });
 
-  it('throws 501 for non-docx kinds', async () => {
+  it('propagates the registry 501 for kinds without a handler', async () => {
     (prisma.document.findUnique as jest.Mock).mockResolvedValue({ ...storedRow, kind: 'pptx' });
     await expect(service.export('d-1')).rejects.toThrow(NotImplementedException);
   });

@@ -5,7 +5,7 @@ import type { OfficeHandler } from './office-handler.interface';
 const fakeHandler = (kind: OfficeHandler['kind']): OfficeHandler => ({
   kind,
   createDocumentCopy: async () => undefined,
-  exportDocument: async () => undefined,
+  exportDocument: async () => ({ buffer: Buffer.alloc(0), mime: 'application/test', filename: 't' }),
 });
 
 describe('OfficeHandlerRegistry', () => {

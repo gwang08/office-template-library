@@ -12,6 +12,15 @@ export interface OfficeDocumentContext {
   title: string;
 }
 
+/** What GET /api/documents/:id/export streams (built by the handler). */
+export interface OfficeExportPayload {
+  buffer: Buffer;
+  /** OOXML mime for the kind (e.g. presentationml for pptx). */
+  mime: string;
+  /** Header-safe ascii slug of the title + kind extension. */
+  filename: string;
+}
+
 export interface OfficeHandler {
   readonly kind: OfficeKind;
 
@@ -22,8 +31,13 @@ export interface OfficeHandler {
   createDocumentCopy(templateStorageKey: string, documentStorageKey: string): Promise<void>;
 
   /**
-   * Exports source content (HTML for docx editors) into an office file at
-   * documentStorageKey. Returns the canonical content for storage.
+   * Builds the export file for the kind: docx renders `content` (editor
+   * HTML) into a fresh DOCX; pptx streams the stored copy. `content` is
+   * null for kinds whose source of truth is the file itself (pptx).
    */
-  exportDocument(context: OfficeDocumentContext, content: string, documentStorageKey: string): Promise<void>;
+  exportDocument(
+    context: OfficeDocumentContext,
+    content: string | null,
+    documentStorageKey: string,
+  ): Promise<OfficeExportPayload>;
 }
