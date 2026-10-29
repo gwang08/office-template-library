@@ -1,0 +1,126 @@
+/* Tiptap ships no CSS — author the document surface here (research gotcha:
+   tables are invisible without borders; v3 renders the contenteditable with
+   class "tiptap"). Scoped under .editor-surface to stay contained. */
+
+.editor-surface:focus-within {
+  outline: 2px solid #a5b4fc; /* indigo-300 */
+  outline-offset: 2px;
+}
+
+.editor-surface .tiptap {
+  color: #1e293b; /* slate-800 */
+  font-size: 0.95rem;
+  line-height: 1.65;
+  min-height: 420px;
+  outline: none;
+  padding: 1.5rem 2rem;
+}
+
+.editor-surface .tiptap > *:first-child {
+  margin-top: 0;
+}
+
+.editor-surface .tiptap > *:last-child {
+  margin-bottom: 0;
+}
+
+.editor-surface .tiptap p {
+  margin: 0.75em 0;
+}
+
+.editor-surface .tiptap h1,
+.editor-surface .tiptap h2,
+.editor-surface .tiptap h3,
+.editor-surface .tiptap h4 {
+  color: #0f172a; /* slate-900 */
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.4em 0 0.5em;
+}
+
+.editor-surface .tiptap h1 { font-size: 1.6em; }
+.editor-surface .tiptap h2 { font-size: 1.35em; }
+.editor-surface .tiptap h3 { font-size: 1.15em; }
+.editor-surface .tiptap h4 { font-size: 1.05em; }
+
+/* Underline round-trips through the export pipeline — keep it explicit. */
+.editor-surface .tiptap u {
+  text-decoration: underline;
+}
+
+.editor-surface .tiptap ul,
+.editor-surface .tiptap ol {
+  margin: 0.75em 0;
+  padding-left: 1.6em;
+}
+
+.editor-surface .tiptap ul { list-style: disc; }
+.editor-surface .tiptap ol { list-style: decimal; }
+
+.editor-surface .tiptap li {
+  margin: 0.25em 0;
+}
+
+/* Mammoth emits plain <table> with no borders — draw the grid ourselves. */
+.editor-surface .tiptap table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  overflow: hidden;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.editor-surface .tiptap th,
+.editor-surface .tiptap td {
+  border: 1px solid #cbd5e1; /* slate-300 */
+  padding: 0.45em 0.7em;
+  position: relative;
+  text-align: left;
+  vertical-align: top;
+}
+
+.editor-surface .tiptap th {
+  background: #f8fafc; /* slate-50 */
+  font-weight: 600;
+}
+
+.editor-surface .tiptap a {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+.editor-surface .tiptap hr {
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  margin: 1.25em 0;
+}
+
+.editor-surface .tiptap img {
+  height: auto;
+  max-width: 100%;
+}
+
+.editor-surface .tiptap blockquote {
+  border-left: 3px solid #cbd5e1;
+  color: #64748b;
+  margin: 1em 0;
+  padding-left: 1em;
+}
+
+.editor-surface .tiptap pre {
+  background: #f1f5f9;
+  border-radius: 0.5rem;
+  margin: 1em 0;
+  padding: 0.75em 1em;
+}
+
+.editor-surface .tiptap code {
+  background: #f1f5f9;
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+}
+
+/* Selected table cells while editing (Tiptap table selection marks). */
+.editor-surface .tiptap .selectedCell {
+  background: #eef2ff; /* indigo-50 */
+}

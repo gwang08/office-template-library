@@ -1,8 +1,9 @@
 // Library page ("/"): filter bar (debounced search + kind tabs + category
 // chips) feeding useTemplates, responsive card grid with skeleton/error/empty
-// states, and the preview modal at page level. "Use template" emits onUse —
-// the editor route arrives in Phase 04.
+// states, and the preview modal at page level. The modal itself handles the
+// docx copy-on-use flow (Phase 04); onUse now only covers the pptx placeholder.
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CategoryChips } from '../../components/category-chips';
 import { KindTabs, type KindFilter } from '../../components/kind-tabs';
 import { SearchBar } from '../../components/search-bar';
@@ -28,9 +29,10 @@ export function LibraryPage() {
     kind: kind === 'all' ? undefined : kind,
   });
 
-  // Placeholder until Phase 04 wires the real editor flow.
+  // PPTX placeholder until Phase 05b wires the slides flow (docx is handled
+  // inside the preview modal: create document → navigate to the editor).
   const handleUse = useCallback((template: TemplateDto) => {
-    setToast(`"${template.name}" editor — coming in the next phase`);
+    setToast(`Slides editor for "${template.name}" — coming soon`);
   }, []);
 
   useEffect(() => {
@@ -60,9 +62,17 @@ export function LibraryPage() {
             </p>
           </div>
           {!loading && !error && (
-            <p className="text-sm text-slate-400" aria-live="polite">
-              {templates.length} {templates.length === 1 ? 'template' : 'templates'}
-            </p>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/documents"
+                className="text-sm font-medium text-indigo-600 transition hover:text-indigo-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                My documents →
+              </Link>
+              <p className="text-sm text-slate-400" aria-live="polite">
+                {templates.length} {templates.length === 1 ? 'template' : 'templates'}
+              </p>
+            </div>
           )}
         </header>
 

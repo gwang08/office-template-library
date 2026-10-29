@@ -1,10 +1,12 @@
 // Template preview modal: fetches the detail DTO, branches by kind —
-// DOCX → sanitized mammoth HTML, PPTX → live deck w/ SVG fallback — and
-// exposes "Use template" via the onUse prop (wired to the editor in Phase 04).
+// DOCX → sanitized mammoth HTML, PPTX → live deck w/ SVG fallback.
+// "Use template" (docx) creates the copy-on-use document and navigates to
+// the editor; pptx still delegates to onUse (placeholder until Phase 05b).
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Modal } from '../../components/modal';
 import { ErrorState } from '../../components/state-blocks';
-import { getTemplate } from '../../lib/api';
+import { createDocument, getTemplate } from '../../lib/api';
 import type { TemplateDetailDto, TemplateDto } from '../../lib/types';
 import { DocxPreview } from './docx-preview';
 import { PptxPreview } from './pptx-preview';
@@ -21,11 +23,14 @@ export function PreviewModal({
 }: {
   template: TemplateDto;
   onClose: () => void;
-  /** Phase 04/05 wire this to POST /api/documents + editor route. */
+  /** PPTX placeholder until Phase 05b wires the slides flow. */
   onUse: (template: TemplateDto) => void;
 }) {
+  const navigate = useNavigate();
   const [detailState, setDetailState] = useState<DetailState>({ phase: 'loading' });
   const [retryToken, setRetryToken] = useState(0);
+  const [creating, setCreating] = useState(false);
+  const [useError, setUseError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -46,6 +51,24 @@ export function PreviewModal({
     };
   }, [template.id, retryToken]);
 
+  const handleUse = async () => {
+    if (template.kind !== 'docx') {
+      onUse(template); // PPTX placeholder (Phase 05b)
+      return;
+    }
+    setCreating(true);
+    setUseError(null);
+    try {
+      // Copy-on-use: the template file stays untouched; a new document row
+      // (with contentHtml from the copy) comes back — land in the editor.
+      const doc = await createDocument(template.id);
+      navigate(`/documents/${encodeURIComponent(doc.id)}/edit`);
+    } catch (cause: unknown) {
+      setCreating(false);
+      setUseError(cause instanceof Error ? cause.message : 'Failed to create document');
+    }
+  };
+
   return (
     <Modal title={template.name} onClose={onClose} footer={
       <div className="flex flex-wrap items-center justify-end gap-2">
@@ -58,11 +81,11 @@ export function PreviewModal({
         </a>
         <button
           type="button"
-          onClick={() => onUse(template)}
-          title="Editor arrives in the next phase"
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          onClick={handleUse}
+          disabled={creating}
+          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Use template
+          {creating ? 'Creating…' : 'Use template'}
         </button>
       </div>
     }>
@@ -77,6 +100,11 @@ export function PreviewModal({
             </span>
           </div>
           <p className="text-sm text-slate-600">{template.description}</p>
+          {useError && (
+            <p className="mt-2 text-sm font-medium text-red-600" role="alert">
+              {useError}
+            </p>
+          )}
         </div>
 
         {template.kind === 'docx' ? (

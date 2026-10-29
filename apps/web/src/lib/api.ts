@@ -60,3 +60,68 @@ export async function getTemplateFile(id: string): Promise<ArrayBuffer> {
 export function assetUrl(key: string): string {
   return `/${key.replace(/^\/+/, '')}`;
 }
+
+// --- Phase 04 additions (documents: copy-on-use + editor) ------------------
+
+import type { TemplateKind } from './types';
+
+/** Row of GET /api/documents (list) — mirrors DocumentListItem (API). */
+export interface DocumentListItemDto {
+  id: string;
+  title: string;
+  kind: TemplateKind | string;
+  templateName: string;
+  /** ISO timestamp. */
+  updatedAt: string;
+}
+
+/** GET /api/documents/:id (detail) — includes the editor content. */
+export interface DocumentDetailDto extends DocumentListItemDto {
+  contentHtml: string | null;
+  /** ISO timestamp. */
+  createdAt: string;
+}
+
+/** PATCH /api/documents/:id body — present fields only (partial update). */
+export interface UpdateDocumentParams {
+  title?: string;
+  contentHtml?: string;
+}
+
+/** Minimal typed send wrapper for the mutating document calls. */
+async function send<T>(path: string, method: 'POST' | 'PATCH', body: unknown): Promise<T> {
+  const response = await fetch(path, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new ApiError(response.status, `${method} ${path} failed with ${response.status}`);
+  }
+  return (await response.json()) as T;
+}
+
+/** POST /api/documents — copy-on-use from a template; 201 DocumentDto back. */
+export function createDocument(templateId: string): Promise<DocumentDetailDto> {
+  return send<DocumentDetailDto>('/api/documents', 'POST', { templateId });
+}
+
+/** GET /api/documents — all documents, newest first. */
+export function listDocuments(): Promise<DocumentListItemDto[]> {
+  return get<DocumentListItemDto[]>('/api/documents');
+}
+
+/** GET /api/documents/:id — detail incl. contentHtml. */
+export function getDocument(id: string): Promise<DocumentDetailDto> {
+  return get<DocumentDetailDto>(`/api/documents/${encodeURIComponent(id)}`);
+}
+
+/** PATCH /api/documents/:id — partial update (title-only must not clobber content). */
+export function patchDocument(id: string, params: UpdateDocumentParams): Promise<DocumentDetailDto> {
+  return send<DocumentDetailDto>(`/api/documents/${encodeURIComponent(id)}`, 'PATCH', params);
+}
+
+/** Export download URL — the endpoint sets the attachment disposition. */
+export function exportUrl(id: string): string {
+  return `/api/documents/${encodeURIComponent(id)}/export`;
+}
