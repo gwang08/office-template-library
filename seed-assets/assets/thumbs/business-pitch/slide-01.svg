@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+<rect x="0" y="0" width="1280" height="720" fill="#0F172A"/>
+<ellipse cx="1248" cy="126" rx="352" ry="342" fill="#38BDF8" fill-opacity="0.45"/>
+<ellipse cx="1267.2" cy="597.6" rx="217.6" ry="223.2" fill="#F472B6" fill-opacity="0.55"/>
+<rect x="76.8" y="338.4" width="115.2" height="8.64" fill="#F472B6"/>
+<text x="76.8" y="285.6" font-family="Arial, Arial, sans-serif" font-size="96" fill="#F8FAFC" text-anchor="start" font-weight="bold">NorthPeak Analytics</text>
+<text x="76.8" y="430.04" font-family="Arial, Arial, sans-serif" font-size="35.56" fill="#B8C4D9" text-anchor="start">Series A — turning field data into decisions</text>
+</svg>

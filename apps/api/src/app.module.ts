@@ -6,6 +6,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { OfficeHandlerRegistry } from './office/office-handler.registry';
+import { TemplatesModule } from './templates/templates.module';
 
 @Module({
   imports: [
@@ -24,7 +26,12 @@ import { PrismaModule } from './prisma/prisma.module';
     }),
     PrismaModule,
     HealthModule,
+    TemplatesModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // Extensibility seam — handlers are registered into it in Phases 04/05.
+    OfficeHandlerRegistry,
+  ],
 })
 export class AppModule {}

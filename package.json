@@ -9,6 +9,7 @@
   },
   "scripts": {
     "bootstrap": "node scripts/bootstrap-storage.mjs && pnpm --filter api db:deploy && pnpm --filter api db:seed",
+    "gen:assets": "pnpm --filter scripts generate",
     "dev": "pnpm -r --parallel --stream dev",
     "build": "pnpm --filter api build && pnpm --filter web build",
     "test": "pnpm --filter api test && pnpm --filter api test:e2e"

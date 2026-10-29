@@ -1,0 +1,175 @@
+[
+  {
+    "id": "77777777-7777-4777-8777-777777777777",
+    "kind": "pptx",
+    "name": "Business Pitch",
+    "description": "Six-slide investor pitch: problem, solution, market, model and ask.",
+    "category": "Business",
+    "storageKey": "templates/business-pitch.pptx",
+    "thumbnailKey": "assets/thumbs/business-pitch/slide-01.svg",
+    "slides": [
+      {
+        "order": 1,
+        "title": "NorthPeak Analytics",
+        "previewKey": "assets/thumbs/business-pitch/slide-01.svg"
+      },
+      {
+        "order": 2,
+        "title": "The Problem",
+        "previewKey": "assets/thumbs/business-pitch/slide-02.svg"
+      },
+      {
+        "order": 3,
+        "title": "Our Solution",
+        "previewKey": "assets/thumbs/business-pitch/slide-03.svg"
+      },
+      {
+        "order": 4,
+        "title": "Market Opportunity",
+        "previewKey": "assets/thumbs/business-pitch/slide-04.svg"
+      },
+      {
+        "order": 5,
+        "title": "Business Model",
+        "previewKey": "assets/thumbs/business-pitch/slide-05.svg"
+      },
+      {
+        "order": 6,
+        "title": "Raising $6M Series A",
+        "previewKey": "assets/thumbs/business-pitch/slide-06.svg"
+      }
+    ]
+  },
+  {
+    "id": "11111111-1111-4111-8111-111111111111",
+    "kind": "docx",
+    "name": "Business Proposal",
+    "description": "Structured services proposal with executive summary, approach, tiered pricing table and next steps.",
+    "category": "Business",
+    "storageKey": "templates/business-proposal.docx",
+    "thumbnailKey": "assets/thumbs/business-proposal/card.svg",
+    "slides": []
+  },
+  {
+    "id": "55555555-5555-4555-8555-555555555555",
+    "kind": "docx",
+    "name": "Cover Letter",
+    "description": "One-page application cover letter with emphasis formatting and a strengths summary.",
+    "category": "Personal",
+    "storageKey": "templates/cover-letter.docx",
+    "thumbnailKey": "assets/thumbs/cover-letter/card.svg",
+    "slides": []
+  },
+  {
+    "id": "99999999-9999-4999-8999-999999999999",
+    "kind": "pptx",
+    "name": "Creative Portfolio",
+    "description": "Bold five-slide designer portfolio with section dividers and selected work.",
+    "category": "Personal",
+    "storageKey": "templates/creative-portfolio.pptx",
+    "thumbnailKey": "assets/thumbs/creative-portfolio/slide-01.svg",
+    "slides": [
+      {
+        "order": 1,
+        "title": "Mira Vasquez",
+        "previewKey": "assets/thumbs/creative-portfolio/slide-01.svg"
+      },
+      {
+        "order": 2,
+        "title": "Brand Systems",
+        "previewKey": "assets/thumbs/creative-portfolio/slide-02.svg"
+      },
+      {
+        "order": 3,
+        "title": "Selected Projects",
+        "previewKey": "assets/thumbs/creative-portfolio/slide-03.svg"
+      },
+      {
+        "order": 4,
+        "title": "Illustration & Motion",
+        "previewKey": "assets/thumbs/creative-portfolio/slide-04.svg"
+      },
+      {
+        "order": 5,
+        "title": "Let’s make something",
+        "previewKey": "assets/thumbs/creative-portfolio/slide-05.svg"
+      }
+    ]
+  },
+  {
+    "id": "44444444-4444-4444-8444-444444444444",
+    "kind": "docx",
+    "name": "Invoice",
+    "description": "Clean service invoice with line-item table, totals and payment instructions.",
+    "category": "Finance",
+    "storageKey": "templates/invoice.docx",
+    "thumbnailKey": "assets/thumbs/invoice/card.svg",
+    "slides": []
+  },
+  {
+    "id": "88888888-8888-4888-8888-888888888888",
+    "kind": "pptx",
+    "name": "Lesson Plan",
+    "description": "Five-slide classroom lesson deck with objectives, timed flow and assessment checkpoints.",
+    "category": "Education",
+    "storageKey": "templates/lesson-plan.pptx",
+    "thumbnailKey": "assets/thumbs/lesson-plan/slide-01.svg",
+    "slides": [
+      {
+        "order": 1,
+        "title": "Photosynthesis in Action",
+        "previewKey": "assets/thumbs/lesson-plan/slide-01.svg"
+      },
+      {
+        "order": 2,
+        "title": "Learning Objectives",
+        "previewKey": "assets/thumbs/lesson-plan/slide-02.svg"
+      },
+      {
+        "order": 3,
+        "title": "Lesson Flow (45 min)",
+        "previewKey": "assets/thumbs/lesson-plan/slide-03.svg"
+      },
+      {
+        "order": 4,
+        "title": "Assessment Checkpoints",
+        "previewKey": "assets/thumbs/lesson-plan/slide-04.svg"
+      },
+      {
+        "order": 5,
+        "title": "Homework & Resources",
+        "previewKey": "assets/thumbs/lesson-plan/slide-05.svg"
+      }
+    ]
+  },
+  {
+    "id": "22222222-2222-4222-8222-222222222222",
+    "kind": "docx",
+    "name": "Meeting Minutes",
+    "description": "Formal minutes template with attendees table, agenda, discussion notes, decisions and action items.",
+    "category": "Business",
+    "storageKey": "templates/meeting-minutes.docx",
+    "thumbnailKey": "assets/thumbs/meeting-minutes/card.svg",
+    "slides": []
+  },
+  {
+    "id": "33333333-3333-4333-8333-333333333333",
+    "kind": "docx",
+    "name": "Project Status Report",
+    "description": "Weekly project report with RAG milestone table, risk register, accomplishments and next-week plan.",
+    "category": "Business",
+    "storageKey": "templates/project-status-report.docx",
+    "thumbnailKey": "assets/thumbs/project-status-report/card.svg",
+    "slides": []
+  },
+  {
+    "id": "66666666-6666-4666-8666-666666666666",
+    "kind": "docx",
+    "name": "Resume",
+    "description": "Single-page resume with summary, skills, experience table and education highlights.",
+    "category": "Personal",
+    "storageKey": "templates/resume.docx",
+    "thumbnailKey": "assets/thumbs/resume/card.svg",
+    "slides": []
+  }
+]

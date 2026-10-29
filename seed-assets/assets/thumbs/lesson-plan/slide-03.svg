@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+<rect x="0" y="0" width="1280" height="720" fill="#FFF8F0"/>
+<rect x="76.8" y="136.8" width="128" height="8.64" fill="#F59E0B"/>
+<ellipse cx="96.64" cy="228.24" rx="7.04" ry="10.8" fill="#4F46E5"/>
+<ellipse cx="96.64" cy="321.84" rx="7.04" ry="10.8" fill="#4F46E5"/>
+<ellipse cx="96.64" cy="415.44" rx="7.04" ry="10.8" fill="#4F46E5"/>
+<ellipse cx="96.64" cy="509.04" rx="7.04" ry="10.8" fill="#4F46E5"/>
+<text x="76.8" y="106.31" font-family="Georgia, Arial, sans-serif" font-size="56.89" fill="#1E1B4B" text-anchor="start" font-weight="bold">Lesson Flow (45 min)</text>
+<text x="140.8" y="248.8" font-family="Georgia, Arial, sans-serif" font-size="32" fill="#52525B" text-anchor="start">Warm-up: what do plants eat? (5 min discussion)</text>
+<text x="140.8" y="342.4" font-family="Georgia, Arial, sans-serif" font-size="32" fill="#52525B" text-anchor="start">Direct instruction with diagram walk-through (12 min)</text>
+<text x="140.8" y="436" font-family="Georgia, Arial, sans-serif" font-size="32" fill="#52525B" text-anchor="start">Lab stations: spinach-leaf discs under different lights (20 min)</text>
+<text x="140.8" y="529.6" font-family="Georgia, Arial, sans-serif" font-size="32" fill="#52525B" text-anchor="start">Exit ticket and recap (8 min)</text>
+</svg>

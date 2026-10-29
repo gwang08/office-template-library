@@ -2,7 +2,10 @@
   "name": "scripts",
   "version": "0.0.0",
   "private": true,
-  "description": "Office-file generators producing committed seed-assets/ (filled in Phase 02)",
+  "description": "Office-file generators producing committed seed-assets/",
+  "scripts": {
+    "generate": "tsx generate-assets.ts"
+  },
   "devDependencies": {
     "docx": "9.15.0",
     "pptxgenjs": "^4.0.1",

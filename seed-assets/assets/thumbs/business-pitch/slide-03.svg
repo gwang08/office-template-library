@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+<rect x="0" y="0" width="1280" height="720" fill="#0F172A"/>
+<rect x="76.8" y="136.8" width="128" height="8.64" fill="#F472B6"/>
+<ellipse cx="96.64" cy="228.24" rx="7.04" ry="10.8" fill="#38BDF8"/>
+<ellipse cx="96.64" cy="321.84" rx="7.04" ry="10.8" fill="#38BDF8"/>
+<ellipse cx="96.64" cy="415.44" rx="7.04" ry="10.8" fill="#38BDF8"/>
+<text x="76.8" y="106.31" font-family="Arial, Arial, sans-serif" font-size="56.89" fill="#F8FAFC" text-anchor="start" font-weight="bold">Our Solution</text>
+<text x="140.8" y="248.8" font-family="Arial, Arial, sans-serif" font-size="32" fill="#B8C4D9" text-anchor="start">Offline-first mobile capture with guided checklists</text>
+<text x="140.8" y="342.4" font-family="Arial, Arial, sans-serif" font-size="32" fill="#B8C4D9" text-anchor="start">Instant sync and exception alerts when connectivity returns</text>
+<text x="140.8" y="436" font-family="Arial, Arial, sans-serif" font-size="32" fill="#B8C4D9" text-anchor="start">One-click audit trail exported to PDF or API</text>
+</svg>

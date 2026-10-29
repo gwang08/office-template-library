@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+<rect x="0" y="0" width="1280" height="720" fill="#111111"/>
+<rect x="76.8" y="136.8" width="128" height="8.64" fill="#F59E0B"/>
+<ellipse cx="96.64" cy="228.24" rx="7.04" ry="10.8" fill="#EC4899"/>
+<ellipse cx="96.64" cy="321.84" rx="7.04" ry="10.8" fill="#EC4899"/>
+<ellipse cx="96.64" cy="415.44" rx="7.04" ry="10.8" fill="#EC4899"/>
+<ellipse cx="96.64" cy="509.04" rx="7.04" ry="10.8" fill="#EC4899"/>
+<text x="76.8" y="106.31" font-family="Verdana, Arial, sans-serif" font-size="56.89" fill="#FAFAFA" text-anchor="start" font-weight="bold">Selected Projects</text>
+<text x="140.8" y="248.8" font-family="Verdana, Arial, sans-serif" font-size="32" fill="#A3A3A3" text-anchor="start">Ferment — packaging system for a natural wine club</text>
+<text x="140.8" y="342.4" font-family="Verdana, Arial, sans-serif" font-size="32" fill="#A3A3A3" text-anchor="start">Loom&amp;Ledger — identity and site for a craft accounting studio</text>
+<text x="140.8" y="436" font-family="Verdana, Arial, sans-serif" font-size="32" fill="#A3A3A3" text-anchor="start">Fieldnotes — app icon set and illustration language</text>
+<text x="140.8" y="529.6" font-family="Verdana, Arial, sans-serif" font-size="32" fill="#A3A3A3" text-anchor="start">Studio Mast — exhibition graphics, two city tour</text>
+</svg>
