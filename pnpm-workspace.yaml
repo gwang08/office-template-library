@@ -1,0 +1,11 @@
+packages:
+  - "apps/*"
+  - "scripts"
+
+# pnpm >= 10 blocks dependency lifecycle (build) scripts unless explicitly approved.
+# Required for: Prisma engine download (client + CLI), esbuild binary install.
+onlyBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - prisma
+  - esbuild

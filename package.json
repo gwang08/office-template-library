@@ -1,0 +1,16 @@
+{
+  "name": "office-template-library",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Office template library: DOCX template editor + PPTX template preview (monorepo)",
+  "packageManager": "pnpm@10.26.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "bootstrap": "node scripts/bootstrap-storage.mjs && pnpm --filter api db:deploy && pnpm --filter api db:seed",
+    "dev": "pnpm -r --parallel --stream dev",
+    "build": "pnpm --filter api build && pnpm --filter web build",
+    "test": "pnpm --filter api test && pnpm --filter api test:e2e"
+  }
+}
